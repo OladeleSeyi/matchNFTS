@@ -8,7 +8,7 @@ export async function computeMatches(
   let nextPage: string | null;
   let options: AxiosRequestConfig = {
     method: "GET",
-    url: "https://eth-mainnet.g.alchemy.com/nft/v2/demo/getNFTs",
+    url: process.env.ALCHEMY_API,
     params: {
       owner: reqData.owner,
       "contractAddresses[]": reqData.contract,
