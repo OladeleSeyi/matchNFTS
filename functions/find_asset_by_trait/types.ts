@@ -9,7 +9,7 @@ type traitType = {
 
 export interface AlchemyResponseType {
   ownedNfts: OwnedNftType[];
-  totalCount: Number;
+  totalCount: number;
   pageKey: string | null;
   blockHash: string;
 }

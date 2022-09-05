@@ -1,50 +1,20 @@
-import { AxiosRequestConfig, AxiosResponse, default as axios } from "axios";
+import { AxiosRequestConfig, default as axios } from "axios";
+import { BadRequestError } from "functions/utils/bad_request_error";
 import { AlchemyResponseType, OwnedNftType, RequestSchema } from "./types";
-
-export async function computeMatches(
-  reqData: RequestSchema
-): Promise<OwnedNftType[]> {
-  let match: OwnedNftType[];
-  let nextPage: string | null;
-  let options: AxiosRequestConfig = {
-    method: "GET",
-    url: process.env.ALCHEMY_API,
-    params: {
-      owner: reqData.owner,
-      "contractAddresses[]": reqData.contract,
-      withMetadata: "true",
-    },
-    headers: { Accept: "application/json" },
-  };
-
-  let apiResponse = await callAlchemyApi(options);
-
-  let data: OwnedNftType[] = apiResponse.ownedNfts;
-  nextPage = apiResponse.pageKey;
-
-  while (nextPage) {
-    options.params.pageKey = nextPage;
-    let newApiResponse = await callAlchemyApi(options);
-    nextPage = newApiResponse.pageKey ? newApiResponse.pageKey : null;
-    let nftBatch = newApiResponse.ownedNfts;
-    data = [...data, ...nftBatch];
-  }
-  match = searchForTraits(data, reqData.traits);
-
-  return match;
-}
 
 async function callAlchemyApi(
   options: AxiosRequestConfig
 ): Promise<AlchemyResponseType> {
-  console.log("call");
-  let res = await axios
+  const res = await axios
     .request(options)
     .then(function (response) {
       return response.data;
     })
     .catch(function (error) {
-      throw new Error("Error getting Nfts");
+      throw new BadRequestError({
+        message: error.response.data,
+        status: 400,
+      });
     });
   return res;
 }
@@ -66,4 +36,36 @@ function searchForTraits(data: OwnedNftType[], opt: RequestSchema["traits"]) {
     });
   });
   return resultBox;
+}
+
+export async function computeMatches(
+  reqData: RequestSchema
+): Promise<OwnedNftType[]> {
+  let match: OwnedNftType[];
+  let nextPage: string | null;
+  const options: AxiosRequestConfig = {
+    method: "GET",
+    url: process.env.ALCHEMY_API,
+    params: {
+      owner: reqData.owner,
+      "contractAddresses[]": reqData.contract,
+      withMetadata: "true",
+    },
+    headers: { Accept: "application/json" },
+  };
+
+  const apiResponse = await callAlchemyApi(options);
+
+  let data: OwnedNftType[] = apiResponse.ownedNfts;
+  nextPage = apiResponse.pageKey;
+
+  while (nextPage) {
+    options.params.pageKey = nextPage;
+    const newApiResponse = await callAlchemyApi(options);
+    nextPage = newApiResponse.pageKey ? newApiResponse.pageKey : null;
+    data = [...data, ...newApiResponse.ownedNfts];
+  }
+  match = searchForTraits(data, reqData.traits);
+
+  return match;
 }
