@@ -16,12 +16,6 @@ provider:
   region: us-east-1
 
 functions:
-  hello:
-    handler: handler.hello
-    events:
-      - http:
-          path: hello
-          method: get
   findAssetsByTraits:
     handler: functions/find_asset_by_trait/find_asset_by_trait.main
     events:

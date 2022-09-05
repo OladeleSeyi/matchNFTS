@@ -3,11 +3,11 @@ import {
   APIGatewayProxyHandler,
   APIGatewayProxyResult,
 } from "aws-lambda";
-import validateAndReturnRequest from "functions/utils/validate_and_return_data";
+import validateAndReturnRequest from "../utils/validate_and_return_data";
 import { computeMatches } from "./helperfunctions";
 import { genericObject } from "./types";
 
-const schema: genericObject = {
+const reqSchema: genericObject = {
   properties: {
     chain: { type: "string" },
     contract: { type: "string" },
@@ -21,7 +21,7 @@ export const main: APIGatewayProxyHandler = async (
 ): Promise<APIGatewayProxyResult> => {
   let reqData = JSON.parse(event.body);
   try {
-    reqData = await validateAndReturnRequest(schema, event.body);
+    reqData = await validateAndReturnRequest(reqSchema, event.body);
 
     const matches = await computeMatches(reqData);
 

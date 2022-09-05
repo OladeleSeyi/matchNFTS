@@ -1,8 +1,8 @@
 import { AxiosRequestConfig, default as axios } from "axios";
-import { BadRequestError } from "functions/utils/bad_request_error";
+import { BadRequestError } from "../utils/bad_request_error";
 import { AlchemyResponseType, OwnedNftType, RequestSchema } from "./types";
 
-async function callAlchemyApi(
+export async function callAlchemyApi(
   options: AxiosRequestConfig
 ): Promise<AlchemyResponseType> {
   const res = await axios
@@ -12,7 +12,7 @@ async function callAlchemyApi(
     })
     .catch(function (error) {
       throw new BadRequestError({
-        message: error.response.data,
+        message: error?.response?.data || "Error retrieving assets",
         status: 400,
       });
     });
@@ -55,7 +55,6 @@ export async function computeMatches(
   };
 
   const apiResponse = await callAlchemyApi(options);
-
   let data: OwnedNftType[] = apiResponse.ownedNfts;
   nextPage = apiResponse.pageKey;
 
