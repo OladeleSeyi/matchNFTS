@@ -1,5 +1,5 @@
-type genericObject = {
-  [key: string]: string | string[] | genericObject[] | genericObject;
+export type genericObject = {
+  [key: string]: boolean | string | string[] | genericObject[] | genericObject;
 };
 
 type traitType = {

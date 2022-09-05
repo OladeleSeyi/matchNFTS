@@ -1,20 +1,44 @@
+import Ajv, { JTDSchemaType } from "ajv/dist/jtd";
 import {
   APIGatewayProxyEvent,
   APIGatewayProxyHandler,
   APIGatewayProxyResult,
 } from "aws-lambda";
+import { validateAndReturnRequest } from "functions/utils/validate_and_return_data";
 import { computeMatches } from "./helperfunctions";
+import { genericObject, RequestSchema } from "./types";
 
 export const main: APIGatewayProxyHandler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
-  const reqData = JSON.parse(event.body);
-  // validate
+  let reqData = JSON.parse(event.body);
+
+  try {
+    reqData = await validateAndReturnRequest(schema, event.body);
+  } catch (e) {
+    return {
+      statusCode: e.status,
+      body: JSON.stringify({
+        ...e,
+        message: e.message,
+      }),
+    };
+  }
+
   const matches = await computeMatches(reqData);
   return {
     statusCode: 200,
     body: JSON.stringify({
-      nfts: matches,
+      // nfts: matches,
     }),
   };
+};
+
+const schema: genericObject = {
+  properties: {
+    chain: { type: "string" },
+    contract: { type: "string" },
+    owner: { type: "string" },
+  },
+  additionalProperties: true,
 };
