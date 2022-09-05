@@ -1,7 +1,7 @@
 export default function eventGenerator(
-  body: Object,
+  body: Record<string, unknown>,
   httpMethod: string,
-  ctx: Object
+  ctx: Record<string, unknown>
 ) {
   return {
     httpMethod,
