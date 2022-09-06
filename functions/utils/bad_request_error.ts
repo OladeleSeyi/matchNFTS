@@ -1,5 +1,5 @@
 export class BadRequestError extends Error {
-  errors: any;
+  errors: string;
   status: number;
   constructor({ meta, name, message, status }: ConstructorInputType) {
     super(message);
