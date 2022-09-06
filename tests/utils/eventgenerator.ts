@@ -1,4 +1,5 @@
 interface eventType {
+  [name: string]: any;
   body: string;
   httpMethod: string;
   requestContext: Record<string, unknown>;
@@ -7,7 +8,7 @@ interface eventType {
 export default function eventGenerator(
   body: Record<string, unknown>,
   httpMethod: string,
-  ctx: Record<string, unknown>
+  ctx?: Record<string, unknown>
 ): eventType {
   return {
     httpMethod,

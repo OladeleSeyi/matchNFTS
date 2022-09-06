@@ -41,7 +41,6 @@ function searchForTraits(data: OwnedNftType[], opt: RequestSchema["traits"]) {
 export async function computeMatches(
   reqData: RequestSchema
 ): Promise<OwnedNftType[]> {
-  let match: OwnedNftType[];
   let nextPage: string | null;
   const options: AxiosRequestConfig = {
     method: "GET",
@@ -64,7 +63,7 @@ export async function computeMatches(
     nextPage = newApiResponse.pageKey ? newApiResponse.pageKey : null;
     data = [...data, ...newApiResponse.ownedNfts];
   }
-  match = searchForTraits(data, reqData.traits);
+  const match: OwnedNftType[] = searchForTraits(data, reqData.traits);
 
   return match;
 }
