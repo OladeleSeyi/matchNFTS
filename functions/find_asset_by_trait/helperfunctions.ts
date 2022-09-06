@@ -45,7 +45,7 @@ export async function computeMatches(
   let nextPage: string | null;
   const options: AxiosRequestConfig = {
     method: "GET",
-    url: process.env.ALCHEMY_API,
+    url: `https://${reqData.chain}.g.alchemy.com/nft/v2/demo/getNFTs`,
     params: {
       owner: reqData.owner,
       "contractAddresses[]": reqData.contract,
