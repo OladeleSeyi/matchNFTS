@@ -1,4 +1,4 @@
-service: serverless-typescript-starter
+service: serverless-app
 
 # Create an optimized package for our functions
 package:
@@ -20,5 +20,5 @@ functions:
     handler: functions/find_asset_by_trait/find_asset_by_trait.main
     events:
       - http:
-          path: gello
+          path: find_assets
           method: post
