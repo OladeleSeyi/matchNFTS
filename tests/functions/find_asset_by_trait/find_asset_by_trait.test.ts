@@ -1,3 +1,4 @@
+// @ts-nocheck
 import axios from "axios";
 import { main } from "../../../functions/find_asset_by_trait/find_asset_by_trait";
 
