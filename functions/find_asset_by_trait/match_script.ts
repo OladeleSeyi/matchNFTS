@@ -21,7 +21,7 @@ if (!wallet || !contract)
 let traits = {};
 
 program.args.forEach((arg, i) => {
-  let trait;
+  let trait: string;
   if (arg.includes("trait")) {
     trait = arg.split(":")[1];
     const matchingTraits = program.args[i + 1].split(",");
