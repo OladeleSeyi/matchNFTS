@@ -13,8 +13,6 @@ program
 
 const options = program.opts();
 
-console.log("first", program.args);
-
 const wallet = options.wallet ? options.wallet : null;
 const contract = options.contract ? options.contract : null;
 if (!wallet || !contract)
@@ -39,11 +37,11 @@ const reqData = {
   traits: traits,
 };
 
-// computeMatches(reqData)
-//   .then((data) => {
-//     writeFileSync("data.txt", inspect(data), "utf-8");
-//     return data;
-//   })
-//   .catch((e) => {
-//     console.log(e);
-//   });
+computeMatches(reqData)
+  .then((data) => {
+    writeFileSync("assets.txt", inspect(data, true, null), "utf-8");
+    return data;
+  })
+  .catch((e) => {
+    console.log(e);
+  });
