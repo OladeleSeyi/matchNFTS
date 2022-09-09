@@ -21,6 +21,9 @@ export async function callAlchemyApi(
 
 function searchForTraits(data: OwnedNftType[], opt: RequestSchema["traits"]) {
   const resultBox = [];
+  if (!opt || Object.keys(opt).length === 0) {
+    return data;
+  }
   data.map((nftTraits, i) => {
     nftTraits?.metadata?.attributes?.map((trait) => {
       for (const key in opt) {

@@ -21,10 +21,10 @@ export interface OwnedNftType extends genericObject {
   };
 }
 export interface RequestSchema {
-  chain: string;
+  chain?: string;
   contract: string;
   owner: string;
-  traits: {
+  traits?: {
     [key: string]: string[];
   };
 }
