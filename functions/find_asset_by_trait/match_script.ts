@@ -13,22 +13,37 @@ program
 
 const options = program.opts();
 
+console.log("first", program.args);
+
 const wallet = options.wallet ? options.wallet : null;
 const contract = options.contract ? options.contract : null;
 if (!wallet || !contract)
   [console.log("Your request does not match the given format")];
 
+let traits = {};
+
+program.args.forEach((arg, i) => {
+  let trait;
+  if (arg.includes("trait")) {
+    trait = arg.split(":")[1];
+    const matchingTraits = program.args[i + 1].split(",");
+    traits[trait] = matchingTraits;
+  }
+});
+console.log("traits", traits);
+
 const reqData = {
   chain: options.Chain,
   owner: wallet,
   contract: contract,
+  traits: traits,
 };
 
-computeMatches(reqData)
-  .then((data) => {
-    writeFileSync("data.txt", inspect(data), "utf-8");
-    return data;
-  })
-  .catch((e) => {
-    console.log(e);
-  });
+// computeMatches(reqData)
+//   .then((data) => {
+//     writeFileSync("data.txt", inspect(data), "utf-8");
+//     return data;
+//   })
+//   .catch((e) => {
+//     console.log(e);
+//   });
